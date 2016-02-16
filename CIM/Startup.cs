@@ -1,7 +1,8 @@
-﻿using Microsoft.Owin;
+﻿using CIM;
+using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(CIM.Startup))]
+[assembly: OwinStartup(typeof(Startup))]
 namespace CIM
 {
     public partial class Startup

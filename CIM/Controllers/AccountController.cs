@@ -1,14 +1,12 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using CIM.Model.Models.Login;
+using CIM.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using CIM.Models;
 
 namespace CIM.Controllers
 {
@@ -56,6 +54,15 @@ namespace CIM.Controllers
         // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+
+        //
+        // GET: /Account/Login
+        [AllowAnonymous]
+        public ActionResult Register(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
             return View();
@@ -135,9 +142,24 @@ namespace CIM.Controllers
         }
 
         //
-        // GET: /Account/Register
+
+        // GET: /Account/RegisterCompany
         [AllowAnonymous]
-        public ActionResult Register()
+        public ActionResult RegisterCompanyUser()
+        {
+            return View();
+        }
+
+        // GET: /Account/RegisterCustomer
+        [AllowAnonymous]
+        public ActionResult RegisterCustomerUser()
+        {
+            return View();
+        }
+
+        // GET: /Account/RegisterStaff
+        [AllowAnonymous]
+        public ActionResult RegisterStaffUser()
         {
             return View();
         }
@@ -147,16 +169,101 @@ namespace CIM.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> RegisterCompanyUser(RegisterCompanyUserViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new CompanyUser()
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    City = model.City,
+                    DateOfBirth = model.DateOfBirth,
+                    Country = model.Country,
+                    CompanyName = model.CompanyName,
+                    JobTitle =  model.JobTitle
+                };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                    // Send an email with this link
+                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                    return RedirectToAction("Index", "Home");
+                }
+                AddErrors(result);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        //
+        // POST: /Account/Register
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RegisterCustomerUser(RegisterCustomerUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new CustomerUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    City = model.City,
+                    DateOfBirth = model.DateOfBirth,
+                    Country = model.Country
+                };
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                    // Send an email with this link
+                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                    return RedirectToAction("Index", "Home");
+                }
+                AddErrors(result);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        //
+        // POST: /Account/Register
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RegisterStaffUser(RegisterStaffUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new StaffUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    City = model.City,
+                    DateOfBirth = model.DateOfBirth,
+                    Country = model.Country,
+                    Department = model.Department,
+                    EmployeeNumber = model.EmployeeNumber
+                };
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -367,7 +474,7 @@ namespace CIM.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new CustomerUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {

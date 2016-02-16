@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace CIM.Models
 {
@@ -18,7 +20,7 @@ namespace CIM.Models
     public class SendCodeViewModel
     {
         public string SelectedProvider { get; set; }
-        public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
+        public ICollection<SelectListItem> Providers { get; set; }
         public string ReturnUrl { get; set; }
         public bool RememberMe { get; set; }
     }
@@ -62,7 +64,7 @@ namespace CIM.Models
         public bool RememberMe { get; set; }
     }
 
-    public class RegisterViewModel
+    public class RegisterCompanyUserViewModel
     {
         [Required]
         [EmailAddress]
@@ -77,8 +79,72 @@ namespace CIM.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+        [Display(Name = "Date of birth")]
+        public DateTime DateOfBirth { get; set; }
+        [Display(Name = "Country")]
+        public string Country { get; set; }
+        [Display(Name = "City")]
+        public string City { get; set; }
+        [Display(Name = "CompanyName")]
+        public string CompanyName { get; set; }
+        [Display(Name = "JobTitle")]
+        public string JobTitle { get; set; }
+    }
+
+    public class RegisterCustomerUserViewModel
+    {
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+        [Display(Name = "Date of birth")]
+        public DateTime DateOfBirth { get; set; }
+        [Display(Name = "Country")]
+        public string Country { get; set; }
+        [Display(Name = "City")]
+        public string City { get; set; }
+    }
+
+    public class RegisterStaffUserViewModel
+    {
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+        [Display(Name = "Date of birth")]
+        public DateTime DateOfBirth { get; set; }
+        [Display(Name = "Country")]
+        public string Country { get; set; }
+        [Display(Name = "City")]
+        public string City { get; set; }
+        [Display(Name = "Department")]
+        public string Department { get; set; }
+        [Display(Name = "EmployeeNumber")]
+        public string EmployeeNumber { get; set; }
     }
 
     public class ResetPasswordViewModel
@@ -96,7 +162,7 @@ namespace CIM.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }
