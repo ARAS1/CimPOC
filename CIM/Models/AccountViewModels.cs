@@ -175,4 +175,10 @@ namespace CIM.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
     }
+
+    public class ListUser
+    {
+        [Display(Name = "EmployeeNumber")]
+        public string EmployeeNumber { get; set; }
+    }
 }
