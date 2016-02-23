@@ -1,0 +1,12 @@
+﻿@using CIM.Models
+@model IEnumerable<CIM.Model.Models.Login.CustomerUser>
+@{
+    ViewBag.Title = "ListUsers";
+}
+
+<h2>ListUsers</h2>
+
+@foreach (var user in Model)
+{
+    <ul>@user.Email-@user.Country</ul>
+}
