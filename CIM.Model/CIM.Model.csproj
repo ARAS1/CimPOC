@@ -78,6 +78,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -86,6 +88,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CIMDatabase.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Booking\Booking.cs" />
     <Compile Include="Models\DataContexts\ApplicationDbContext.cs" />
@@ -104,6 +107,7 @@
     <Compile Include="Models\Booking\Ticket.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
