@@ -15,7 +15,7 @@ namespace CIM.Model.Models.DataContexts
         public ModelDbContext() : base("ModelDbConnection")
         {
             Database.SetInitializer<ModelDbContext>(new DropCreateDatabaseAlways<ModelDbContext>());
-            ((IObjectContextAdapter)this).ObjectContext.CommandTimeout = 180;
+            ((IObjectContextAdapter)this).ObjectContext.CommandTimeout = 300;
         }
 
         public virtual DbSet<Booking.Booking>Booking { get; set; }
