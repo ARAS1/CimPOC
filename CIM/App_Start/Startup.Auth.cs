@@ -33,7 +33,6 @@ namespace CIM
         public static string SignInPolicyId = ConfigurationManager.AppSettings["ida:SignInPolicyId"];
         public static string ProfilePolicyId = ConfigurationManager.AppSettings["ida:UserProfilePolicyId"];
 
-
         // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
@@ -60,7 +59,7 @@ namespace CIM
             });
 
 
-            OpenIdConnectAuthenticationOptions options = new OpenIdConnectAuthenticationOptions
+         /*   OpenIdConnectAuthenticationOptions options = new OpenIdConnectAuthenticationOptions
             {
                 // These are standard OpenID Connect parameters, with values pulled from web.config
                 ClientId = clientId,
@@ -89,7 +88,7 @@ namespace CIM
                 },
             };
 
-            app.UseOpenIdConnectAuthentication(options);
+            app.UseOpenIdConnectAuthentication(options);*/
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
             // Enables the application to temporarily store user information when they are verifying the second factor in the two-factor authentication process.

@@ -86,11 +86,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Booking\Booking.cs" />
     <Compile Include="Models\DataContexts\ApplicationDbContext.cs" />
+    <Compile Include="Models\DataContexts\ModelDbContext.cs" />
+    <Compile Include="Models\Enumeration\PhoneType.cs" />
     <Compile Include="Models\Login\CompanyUser.cs" />
     <Compile Include="Models\Company\Company.cs" />
-    <Compile Include="Models\Company\CompanyAdministrator.cs" />
     <Compile Include="Models\Login\CustomerUser.cs" />
     <Compile Include="Models\Enumeration\CompanyType.cs" />
     <Compile Include="Models\Enumeration\Rating.cs" />
