@@ -75,6 +75,7 @@ namespace CIM.Controllers
         {
             if (ModelState.IsValid)
             {
+                ViewBag.ReturnUrl = returnUrl;
                 Company companyModel = new Company()
                 {
                     CompanyName = model.CompanyName,
@@ -87,7 +88,7 @@ namespace CIM.Controllers
                 dbContext.Companies.Add(companyModel);
                 dbContext.SaveChanges();
             }
-            ViewBag.ReturnUrl = returnUrl;
+
             return View();
         }
 
