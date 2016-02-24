@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using CIM.Model;
 using CIM.Model.Models.DataContexts;
 using CIM.Model.Models.Login;
 using CIM.Models;
@@ -66,6 +67,26 @@ namespace CIM.Controllers
         [AllowAnonymous]
         public ActionResult Register(string returnUrl)
         {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+        
+        public ActionResult EditCompanyDetails(string returnUrl, EditCompanyDetailsModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Company companyModel = new Company()
+                {
+                    CompanyName = model.CompanyName,
+                    CompanyRegistrationNumber = model.CompanyRegistrationNumber,
+                    Telephone = model.CompanyTelephone,
+                    Address = model.CompanyAddress,
+                    AreasOfOperation = model.AreasOfOperation
+                };
+                var dbContext = new CimDataModelContainer();
+                dbContext.Companies.Add(companyModel);
+                dbContext.SaveChanges();
+            }
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }

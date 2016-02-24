@@ -1,8 +1,5 @@
 ﻿using System;
 using CIM;
-using CIM.Model.Models.Company;
-using CIM.Model.Models.DataContexts;
-using CIM.Model.Models.Enumeration;
 using Microsoft.Owin;
 using Owin;
 

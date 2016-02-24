@@ -33,6 +33,7 @@ namespace CIM.Models
         [Required]
         [Display(Name = "Code")]
         public string Code { get; set; }
+
         public string ReturnUrl { get; set; }
 
         [Display(Name = "Remember this browser?")]
@@ -79,16 +80,22 @@ namespace CIM.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password",
+            ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
         [Display(Name = "Date of birth")]
         public DateTime DateOfBirth { get; set; }
+
         [Display(Name = "Country")]
         public string Country { get; set; }
+
         [Display(Name = "City")]
         public string City { get; set; }
+
         [Display(Name = "CompanyName")]
         public string CompanyName { get; set; }
+
         [Display(Name = "JobTitle")]
         public string JobTitle { get; set; }
     }
@@ -108,12 +115,16 @@ namespace CIM.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password",
+            ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
         [Display(Name = "Date of birth")]
         public DateTime DateOfBirth { get; set; }
+
         [Display(Name = "Country")]
         public string Country { get; set; }
+
         [Display(Name = "City")]
         public string City { get; set; }
     }
@@ -133,16 +144,22 @@ namespace CIM.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password",
+            ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
         [Display(Name = "Date of birth")]
         public DateTime DateOfBirth { get; set; }
+
         [Display(Name = "Country")]
         public string Country { get; set; }
+
         [Display(Name = "City")]
         public string City { get; set; }
+
         [Display(Name = "Department")]
         public string Department { get; set; }
+
         [Display(Name = "EmployeeNumber")]
         public string EmployeeNumber { get; set; }
     }
@@ -162,7 +179,8 @@ namespace CIM.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password",
+            ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }
@@ -180,5 +198,19 @@ namespace CIM.Models
     {
         [Display(Name = "EmployeeNumber")]
         public string EmployeeNumber { get; set; }
+    }
+
+    public class EditCompanyDetailsModel
+    {
+        [Display(Name = "CompnanyName")]
+        public string CompanyName { get; set; }
+        [Display(Name = "Company Registration Number")]
+        public string CompanyRegistrationNumber { get; set; }
+        [Display(Name = "Compnany Name")]
+        public string CompanyAddress { get; set; }
+        [Display(Name = "Compnany Telephone")]
+        public string CompanyTelephone { get; set; }
+        [Display(Name = "Areas of Operation")]
+        public string AreasOfOperation { get; set; }
     }
 }
