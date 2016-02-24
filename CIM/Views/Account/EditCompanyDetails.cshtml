@@ -1,0 +1,46 @@
+﻿@model CIM.Models.EditCompanyDetailsModel
+@{
+    ViewBag.Title = "Edit Company Details";
+}
+
+<h2>Edit Company Details</h2>
+
+@using (Html.BeginForm("EditCompanyDetails", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+<h4>Edit your company details</h4>
+<hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+<div class="form-group">
+    @Html.LabelFor(m => m.CompanyName, new {@class = "col-md-2 control-label"})
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.CompanyName, new {@class = "form-control"})
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.CompanyRegistrationNumber, new {@class = "col-md-2 control-label"})
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.CompanyRegistrationNumber, new {@class = "form-control"})
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.CompanyAddress, new {@class = "col-md-2 control-label"})
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.CompanyAddress, new {@class = "form-control"})
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.CompanyTelephone, new {@class = "col-md-2 control-label"})
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.CompanyTelephone, new {@class = "form-control"})
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.AreasOfOperation, new {@class = "col-md-2 control-label"})
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.AreasOfOperation, new {@class = "form-control"})
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
