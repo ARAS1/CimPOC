@@ -10,6 +10,8 @@ using CIM.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using System.Data.Entity.Validation;
+using System.Diagnostics;
 
 namespace CIM.Controllers
 {
@@ -70,23 +72,40 @@ namespace CIM.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
-        
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public ActionResult EditCompanyDetails(string returnUrl, EditCompanyDetailsModel model)
         {
             if (ModelState.IsValid)
             {
-                ViewBag.ReturnUrl = returnUrl;
-                Company companyModel = new Company()
+                try {
+                    ViewBag.ReturnUrl = returnUrl;
+                    Company companyModel = new Company()
+                    {
+                        CompanyName = model.CompanyName,
+                        CompanyRegistrationNumber = model.CompanyRegistrationNumber,
+                        Telephone = model.CompanyTelephone,
+                        Address = model.CompanyAddress,
+                        AreasOfOperation = model.AreasOfOperation
+                    };
+                    var dbContext = new CimDataModelContainer();
+                    dbContext.Companies.Add(companyModel);
+                    dbContext.SaveChanges();
+                }
+                catch (DbEntityValidationException dbEx)
                 {
-                    CompanyName = model.CompanyName,
-                    CompanyRegistrationNumber = model.CompanyRegistrationNumber,
-                    Telephone = model.CompanyTelephone,
-                    Address = model.CompanyAddress,
-                    AreasOfOperation = model.AreasOfOperation
-                };
-                var dbContext = new CimDataModelContainer();
-                dbContext.Companies.Add(companyModel);
-                dbContext.SaveChanges();
+                    foreach (var validationErrors in dbEx.EntityValidationErrors)
+                    {
+                        foreach (var validationError in validationErrors.ValidationErrors)
+                        {
+                            Trace.TraceInformation("Property: {0} Error: {1}",
+                                                    validationError.PropertyName,
+                                                    validationError.ErrorMessage);
+                        }
+                    }
+                }
             }
 
             return View();
