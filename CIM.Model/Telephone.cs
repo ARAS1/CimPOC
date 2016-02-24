@@ -14,10 +14,11 @@ namespace CIM.Model
     
     public partial class Telephone
     {
-        public int Id { get; set; }
+        public int TelephoneId { get; set; }
         public string CountryCode { get; set; }
         public string PhoneNumber { get; set; }
         public string Type { get; set; }
+        public string CompanyId { get; set; }
     
         public virtual Company Company { get; set; }
     }

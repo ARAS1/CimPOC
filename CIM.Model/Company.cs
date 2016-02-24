@@ -14,7 +14,7 @@ namespace CIM.Model
     
     public partial class Company
     {
-        public int Id { get; set; }
+        public int CompanyId { get; set; }
         public string CompanyName { get; set; }
         public string CompanyRegistrationNumber { get; set; }
         public string Address { get; set; }

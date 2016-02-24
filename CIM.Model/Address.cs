@@ -14,12 +14,13 @@ namespace CIM.Model
     
     public partial class Address
     {
-        public int Id { get; set; }
+        public int AddressId { get; set; }
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
         public string Country { get; set; }
         public string Town { get; set; }
         public string PostCode { get; set; }
+        public string CompanyId { get; set; }
     
         public virtual Company Companies { get; set; }
     }

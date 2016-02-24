@@ -4,11 +4,80 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Namespace="CimDataModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005">
-        <EntityContainer Name="CimDataModelTargetContainer" >
-        </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+    <Schema Namespace="CimDataModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="CimDataModelStoreContainer">
+    <EntitySet Name="Companies" EntityType="CimDataModel.Store.Companies" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Addresses" EntityType="CimDataModel.Store.Addresses" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Telephones" EntityType="CimDataModel.Store.Telephones" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="AddressCompany" Association="CimDataModel.Store.AddressCompany">
+      <End Role="Address" EntitySet="Addresses" />
+      <End Role="Company" EntitySet="Companies" />
+    </AssociationSet>
+    <AssociationSet Name="CompanyTelephone" Association="CimDataModel.Store.CompanyTelephone">
+      <End Role="Company" EntitySet="Companies" />
+      <End Role="Telephone" EntitySet="Telephones" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Companies">
+    <Key>
+      <PropertyRef Name="CompanyId" />
+    </Key>
+    <Property Name="CompanyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CompanyName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CompanyRegistrationNumber" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Address" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Telephone" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="AreasOfOperation" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Telephones_TelephoneId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Addresses">
+    <Key>
+      <PropertyRef Name="AddressId" />
+    </Key>
+    <Property Name="AddressId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AddressLine1" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="AddressLine2" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Country" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Town" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="PostCode" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CompanyId" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Companies_CompanyId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Telephones">
+    <Key>
+      <PropertyRef Name="TelephoneId" />
+    </Key>
+    <Property Name="TelephoneId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CountryCode" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="PhoneNumber" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Type" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CompanyId" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <Association Name="AddressCompany">
+    <End Role="Address" Type="CimDataModel.Store.Addresses" Multiplicity="*" />
+    <End Role="Company" Type="CimDataModel.Store.Companies" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="CompanyId" />
+      </Principal>
+      <Dependent Role="Address">
+        <PropertyRef Name="Companies_CompanyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CompanyTelephone">
+    <End Role="Company" Type="CimDataModel.Store.Companies" Multiplicity="*" />
+    <End Role="Telephone" Type="CimDataModel.Store.Telephones" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Telephone">
+        <PropertyRef Name="TelephoneId" />
+      </Principal>
+      <Dependent Role="Company">
+        <PropertyRef Name="Telephones_TelephoneId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="CimDataModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
@@ -27,9 +96,9 @@
           </EntityContainer>
         <EntityType Name="Company">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="CompanyId" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CompanyName" Type="String" Nullable="false" />
           <Property Name="CompanyRegistrationNumber" Type="String" Nullable="false" />
           <Property Name="Address" Type="String" Nullable="false" />
@@ -40,25 +109,27 @@
         </EntityType>
         <EntityType Name="Address">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="AddressId" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AddressId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AddressLine1" Type="String" Nullable="false" />
           <Property Name="AddressLine2" Type="String" Nullable="false" />
           <Property Name="Country" Type="String" Nullable="false" />
           <Property Name="Town" Type="String" Nullable="false" />
           <Property Name="PostCode" Type="String" Nullable="false" />
           <NavigationProperty Name="Companies" Relationship="CimDataModel.AddressCompany" FromRole="Address" ToRole="Company" />
+          <Property Name="CompanyId" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="Telephone">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="TelephoneId" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TelephoneId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CountryCode" Type="String" Nullable="false" />
           <Property Name="PhoneNumber" Type="String" Nullable="false" />
           <Property Name="Type" Type="String" Nullable="false" />
           <NavigationProperty Name="Company" Relationship="CimDataModel.CompanyTelephone" FromRole="Telephone" ToRole="Company" />
+          <Property Name="CompanyId" Type="String" Nullable="false" />
         </EntityType>
         <Association Name="AddressCompany">
           <End Type="CimDataModel.Address" Role="Address" Multiplicity="1" />
@@ -72,13 +143,62 @@
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
-        <Alias Key="Model" Value="CimDataModel" />
-        <Alias Key="Target" Value="CimDataModel.Store" />
-        <EntityContainerMapping CdmEntityContainer="CimDataModelContainer" StorageEntityContainer="CimDataModelTargetContainer">
-        </EntityContainerMapping>
-      </Mapping>
-    </edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="CimDataModelStoreContainer" CdmEntityContainer="CimDataModelContainer">
+    <EntitySetMapping Name="Companies">
+      <EntityTypeMapping TypeName="IsTypeOf(CimDataModel.Company)">
+        <MappingFragment StoreEntitySet="Companies">
+          <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+          <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+          <ScalarProperty Name="CompanyRegistrationNumber" ColumnName="CompanyRegistrationNumber" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+          <ScalarProperty Name="AreasOfOperation" ColumnName="AreasOfOperation" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Addresses">
+      <EntityTypeMapping TypeName="IsTypeOf(CimDataModel.Address)">
+        <MappingFragment StoreEntitySet="Addresses">
+          <ScalarProperty Name="AddressId" ColumnName="AddressId" />
+          <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+          <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+          <ScalarProperty Name="Town" ColumnName="Town" />
+          <ScalarProperty Name="PostCode" ColumnName="PostCode" />
+          <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Telephones">
+      <EntityTypeMapping TypeName="IsTypeOf(CimDataModel.Telephone)">
+        <MappingFragment StoreEntitySet="Telephones">
+          <ScalarProperty Name="TelephoneId" ColumnName="TelephoneId" />
+          <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="AddressCompany" TypeName="CimDataModel.AddressCompany" StoreEntitySet="Addresses">
+      <EndProperty Name="Company">
+        <ScalarProperty Name="CompanyId" ColumnName="Companies_CompanyId" />
+      </EndProperty>
+      <EndProperty Name="Address">
+        <ScalarProperty Name="AddressId" ColumnName="AddressId" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="CompanyTelephone" TypeName="CimDataModel.CompanyTelephone" StoreEntitySet="Companies">
+      <EndProperty Name="Telephone">
+        <ScalarProperty Name="TelephoneId" ColumnName="Telephones_TelephoneId" />
+      </EndProperty>
+      <EndProperty Name="Company">
+        <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
@@ -92,6 +212,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
       </DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->

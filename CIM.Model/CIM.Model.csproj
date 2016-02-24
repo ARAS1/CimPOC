@@ -91,6 +91,16 @@
     <Compile Include="Address.cs">
       <DependentUpon>models.tt</DependentUpon>
     </Compile>
+    <Compile Include="CimDataModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CimDataModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CimDataModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CimDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="CimDataModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -99,11 +109,7 @@
     <Compile Include="Company.cs">
       <DependentUpon>models.tt</DependentUpon>
     </Compile>
-    <Compile Include="models.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>models.Context.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="models.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -130,9 +136,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="models.Context.tt">
+    <Content Include="CimDataModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>models.Context.cs</LastGenOutput>
+      <LastGenOutput>CimDataModel.Context.cs</LastGenOutput>
+      <DependentUpon>CimDataModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="CimDataModel.edmx.sql" />
+    <Content Include="CimDataModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CimDataModel.cs</LastGenOutput>
       <DependentUpon>CimDataModel.edmx</DependentUpon>
     </Content>
     <Content Include="models.tt">
