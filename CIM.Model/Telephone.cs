@@ -18,7 +18,7 @@ namespace CIM.Model
         public string CountryCode { get; set; }
         public string PhoneNumber { get; set; }
         public string Type { get; set; }
-        public string CompanyId { get; set; }
+        public int CompanyId { get; set; }
     
         public virtual Company Company { get; set; }
     }

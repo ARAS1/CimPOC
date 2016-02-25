@@ -17,11 +17,11 @@ namespace CIM.Model
         public int CompanyId { get; set; }
         public string CompanyName { get; set; }
         public string CompanyRegistrationNumber { get; set; }
-        public string Address { get; set; }
-        public string Telephone { get; set; }
         public string AreasOfOperation { get; set; }
+        public int TelephoneId { get; set; }
+        public int AddressId { get; set; }
     
-        public virtual Address Address1 { get; set; }
-        public virtual Telephone Telephones { get; set; }
+        public virtual Address Address { get; set; }
+        public virtual Telephone Telephone { get; set; }
     }
 }

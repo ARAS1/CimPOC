@@ -9,9 +9,9 @@
     <EntitySet Name="Companies" EntityType="CimDataModel.Store.Companies" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Addresses" EntityType="CimDataModel.Store.Addresses" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Telephones" EntityType="CimDataModel.Store.Telephones" store:Type="Tables" Schema="dbo" />
-    <AssociationSet Name="AddressCompany" Association="CimDataModel.Store.AddressCompany">
-      <End Role="Address" EntitySet="Addresses" />
+    <AssociationSet Name="CompanyAddress" Association="CimDataModel.Store.CompanyAddress">
       <End Role="Company" EntitySet="Companies" />
+      <End Role="Address" EntitySet="Addresses" />
     </AssociationSet>
     <AssociationSet Name="CompanyTelephone" Association="CimDataModel.Store.CompanyTelephone">
       <End Role="Company" EntitySet="Companies" />
@@ -22,13 +22,12 @@
     <Key>
       <PropertyRef Name="CompanyId" />
     </Key>
-    <Property Name="CompanyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CompanyId" Type="int" Nullable="false" />
     <Property Name="CompanyName" Type="nvarchar(max)" Nullable="false" />
     <Property Name="CompanyRegistrationNumber" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Address" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Telephone" Type="nvarchar(max)" Nullable="false" />
     <Property Name="AreasOfOperation" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Telephones_TelephoneId" Type="int" Nullable="false" />
+    <Property Name="TelephoneId" Type="int" Nullable="false" />
+    <Property Name="AddressId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Addresses">
     <Key>
@@ -40,8 +39,7 @@
     <Property Name="Country" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Town" Type="nvarchar(max)" Nullable="false" />
     <Property Name="PostCode" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="CompanyId" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Companies_CompanyId" Type="int" Nullable="false" />
+    <Property Name="CompanyId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Telephones">
     <Key>
@@ -51,29 +49,29 @@
     <Property Name="CountryCode" Type="nvarchar(max)" Nullable="false" />
     <Property Name="PhoneNumber" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Type" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="CompanyId" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CompanyId" Type="int" Nullable="false" />
   </EntityType>
-  <Association Name="AddressCompany">
-    <End Role="Address" Type="CimDataModel.Store.Addresses" Multiplicity="*" />
-    <End Role="Company" Type="CimDataModel.Store.Companies" Multiplicity="1" />
+  <Association Name="CompanyAddress">
+    <End Role="Company" Type="CimDataModel.Store.Companies" Multiplicity="0..1" />
+    <End Role="Address" Type="CimDataModel.Store.Addresses" Multiplicity="1" />
     <ReferentialConstraint>
-      <Principal Role="Company">
-        <PropertyRef Name="CompanyId" />
+      <Principal Role="Address">
+        <PropertyRef Name="AddressId" />
       </Principal>
-      <Dependent Role="Address">
-        <PropertyRef Name="Companies_CompanyId" />
+      <Dependent Role="Company">
+        <PropertyRef Name="CompanyId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
   <Association Name="CompanyTelephone">
-    <End Role="Company" Type="CimDataModel.Store.Companies" Multiplicity="*" />
+    <End Role="Company" Type="CimDataModel.Store.Companies" Multiplicity="0..1" />
     <End Role="Telephone" Type="CimDataModel.Store.Telephones" Multiplicity="1" />
     <ReferentialConstraint>
       <Principal Role="Telephone">
         <PropertyRef Name="TelephoneId" />
       </Principal>
       <Dependent Role="Company">
-        <PropertyRef Name="Telephones_TelephoneId" />
+        <PropertyRef Name="CompanyId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -85,9 +83,9 @@
           <EntitySet Name="Companies" EntityType="CimDataModel.Company" />
           <EntitySet Name="Addresses" EntityType="CimDataModel.Address" />
           <EntitySet Name="Telephones" EntityType="CimDataModel.Telephone" />
-          <AssociationSet Name="AddressCompany" Association="CimDataModel.AddressCompany">
-            <End Role="Address" EntitySet="Addresses" />
+          <AssociationSet Name="CompanyAddress" Association="CimDataModel.CompanyAddress">
             <End Role="Company" EntitySet="Companies" />
+            <End Role="Address" EntitySet="Addresses" />
           </AssociationSet>
           <AssociationSet Name="CompanyTelephone" Association="CimDataModel.CompanyTelephone">
             <End Role="Company" EntitySet="Companies" />
@@ -98,14 +96,14 @@
           <Key>
             <PropertyRef Name="CompanyId" />
           </Key>
-          <Property Name="CompanyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
           <Property Name="CompanyName" Type="String" Nullable="false" />
           <Property Name="CompanyRegistrationNumber" Type="String" Nullable="false" />
-          <Property Name="Address" Type="String" Nullable="false" />
-          <Property Name="Telephone" Type="String" Nullable="false" />
           <Property Name="AreasOfOperation" Type="String" Nullable="false" />
-          <NavigationProperty Name="Address1" Relationship="CimDataModel.AddressCompany" FromRole="Company" ToRole="Address" />
-          <NavigationProperty Name="Telephones" Relationship="CimDataModel.CompanyTelephone" FromRole="Company" ToRole="Telephone" />
+          <NavigationProperty Name="Address" Relationship="CimDataModel.CompanyAddress" FromRole="Company" ToRole="Address" />
+          <NavigationProperty Name="Telephone" Relationship="CimDataModel.CompanyTelephone" FromRole="Company" ToRole="Telephone" />
+          <Property Name="TelephoneId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="AddressId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
         </EntityType>
         <EntityType Name="Address">
           <Key>
@@ -117,8 +115,8 @@
           <Property Name="Country" Type="String" Nullable="false" />
           <Property Name="Town" Type="String" Nullable="false" />
           <Property Name="PostCode" Type="String" Nullable="false" />
-          <NavigationProperty Name="Companies" Relationship="CimDataModel.AddressCompany" FromRole="Address" ToRole="Company" />
-          <Property Name="CompanyId" Type="String" Nullable="false" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <NavigationProperty Name="Company" Relationship="CimDataModel.CompanyAddress" FromRole="Address" ToRole="Company" />
         </EntityType>
         <EntityType Name="Telephone">
           <Key>
@@ -128,16 +126,32 @@
           <Property Name="CountryCode" Type="String" Nullable="false" />
           <Property Name="PhoneNumber" Type="String" Nullable="false" />
           <Property Name="Type" Type="String" Nullable="false" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
           <NavigationProperty Name="Company" Relationship="CimDataModel.CompanyTelephone" FromRole="Telephone" ToRole="Company" />
-          <Property Name="CompanyId" Type="String" Nullable="false" />
         </EntityType>
-        <Association Name="AddressCompany">
-          <End Type="CimDataModel.Address" Role="Address" Multiplicity="1" />
+        <Association Name="CompanyAddress">
           <End Type="CimDataModel.Company" Role="Company" Multiplicity="1" />
+          <End Type="CimDataModel.Address" Role="Address" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Address">
+              <PropertyRef Name="AddressId" />
+            </Principal>
+            <Dependent Role="Company">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="CompanyTelephone">
           <End Type="CimDataModel.Company" Role="Company" Multiplicity="1" />
           <End Type="CimDataModel.Telephone" Role="Telephone" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Telephone">
+              <PropertyRef Name="TelephoneId" />
+            </Principal>
+            <Dependent Role="Company">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         </Schema>
     </edmx:ConceptualModels>
@@ -151,9 +165,9 @@
           <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
           <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
           <ScalarProperty Name="CompanyRegistrationNumber" ColumnName="CompanyRegistrationNumber" />
-          <ScalarProperty Name="Address" ColumnName="Address" />
-          <ScalarProperty Name="Telephone" ColumnName="Telephone" />
           <ScalarProperty Name="AreasOfOperation" ColumnName="AreasOfOperation" />
+          <ScalarProperty Name="TelephoneId" ColumnName="TelephoneId" />
+          <ScalarProperty Name="AddressId" ColumnName="AddressId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -181,22 +195,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <AssociationSetMapping Name="AddressCompany" TypeName="CimDataModel.AddressCompany" StoreEntitySet="Addresses">
-      <EndProperty Name="Company">
-        <ScalarProperty Name="CompanyId" ColumnName="Companies_CompanyId" />
-      </EndProperty>
-      <EndProperty Name="Address">
-        <ScalarProperty Name="AddressId" ColumnName="AddressId" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <AssociationSetMapping Name="CompanyTelephone" TypeName="CimDataModel.CompanyTelephone" StoreEntitySet="Companies">
-      <EndProperty Name="Telephone">
-        <ScalarProperty Name="TelephoneId" ColumnName="Telephones_TelephoneId" />
-      </EndProperty>
-      <EndProperty Name="Company">
-        <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
-      </EndProperty>
-    </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>

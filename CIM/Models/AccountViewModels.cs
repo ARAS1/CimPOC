@@ -202,15 +202,28 @@ namespace CIM.Models
 
     public class EditCompanyDetailsModel
     {
-        [Display(Name = "CompnanyName")]
+        [Display(Name = "Compnany Name")]
         public string CompanyName { get; set; }
         [Display(Name = "Company Registration Number")]
         public string CompanyRegistrationNumber { get; set; }
-        [Display(Name = "Compnany Name")]
-        public string CompanyAddress { get; set; }
-        [Display(Name = "Compnany Telephone")]
-        public string CompanyTelephone { get; set; }
         [Display(Name = "Areas of Operation")]
         public string AreasOfOperation { get; set; }
+        [Display(Name = "Address Line 1")]
+        public string AddressLine1 { get; set; }
+        [Display(Name = "Address Line 2")]
+        public string AddressLine2 { get; set; }
+        [Display(Name = "Country")]
+        public string Country { get; set; }
+        [Display(Name = "Town")]
+        public string Town { get; set; }
+        [Display(Name = "Post Code")]
+        public string PostCode { get; set; }
+        [Display(Name = "Country Code")]
+        public string CountryCode { get; set; }
+        [Display(Name = "Phone Number")]
+        [Phone]
+        public string PhoneNumber { get; set; }
+        [Display(Name = "Type")]
+        public string Type { get; set; }
     }
 }

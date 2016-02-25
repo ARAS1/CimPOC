@@ -5,12 +5,11 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="a31d3cea919f4dffb97742b8890d39aa" Name="Diagram1" ZoomLevel="97" >
-        <EntityTypeShape EntityType="CimDataModel.Company" Width="1.5" PointX="6.375" PointY="1.125" />
-        <EntityTypeShape EntityType="CimDataModel.Address" Width="1.5" PointX="10.125" PointY="1.125" />
-        <EntityTypeShape EntityType="CimDataModel.Telephone" Width="1.5" PointX="7" PointY="5" />
-        <AssociationConnector Association="CimDataModel.AddressCompany" />
-        <AssociationConnector Association="CimDataModel.CompanyTelephone" ManuallyRouted="false" >
-        </AssociationConnector>
+        <EntityTypeShape EntityType="CimDataModel.Company" Width="1.5" PointX="2.375" PointY="1.25" />
+        <EntityTypeShape EntityType="CimDataModel.Address" Width="1.5" PointX="6.5" PointY="4" />
+        <EntityTypeShape EntityType="CimDataModel.Telephone" Width="1.5" PointX="7.125" PointY="0.625" />
+        <AssociationConnector Association="CimDataModel.CompanyAddress" />
+        <AssociationConnector Association="CimDataModel.CompanyTelephone" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

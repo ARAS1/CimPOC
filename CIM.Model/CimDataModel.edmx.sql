@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 02/24/2016 15:41:05
+-- Date Created: 02/25/2016 16:45:41
 -- Generated from EDMX file: D:\WIP\CustomerIdentityManagementPOC\CIM\CIM\CIM.Model\CimDataModel.edmx
 -- --------------------------------------------------
 
@@ -17,11 +17,26 @@ GO
 -- Dropping existing FOREIGN KEY constraints
 -- --------------------------------------------------
 
+IF OBJECT_ID(N'[dbo].[FK_CompanyAddress]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Companies] DROP CONSTRAINT [FK_CompanyAddress];
+GO
+IF OBJECT_ID(N'[dbo].[FK_CompanyTelephone]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Companies] DROP CONSTRAINT [FK_CompanyTelephone];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
 -- --------------------------------------------------
 
+IF OBJECT_ID(N'[dbo].[Companies]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Companies];
+GO
+IF OBJECT_ID(N'[dbo].[Addresses]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Addresses];
+GO
+IF OBJECT_ID(N'[dbo].[Telephones]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Telephones];
+GO
 
 -- --------------------------------------------------
 -- Creating all tables
@@ -29,13 +44,12 @@ GO
 
 -- Creating table 'Companies'
 CREATE TABLE [dbo].[Companies] (
-    [CompanyId] int IDENTITY(1,1) NOT NULL,
+    [CompanyId] int  NOT NULL,
     [CompanyName] nvarchar(max)  NOT NULL,
     [CompanyRegistrationNumber] nvarchar(max)  NOT NULL,
-    [Address] nvarchar(max)  NOT NULL,
-    [Telephone] nvarchar(max)  NOT NULL,
     [AreasOfOperation] nvarchar(max)  NOT NULL,
-    [Telephones_TelephoneId] int  NOT NULL
+    [TelephoneId] int  NOT NULL,
+    [AddressId] int  NOT NULL
 );
 GO
 
@@ -47,8 +61,7 @@ CREATE TABLE [dbo].[Addresses] (
     [Country] nvarchar(max)  NOT NULL,
     [Town] nvarchar(max)  NOT NULL,
     [PostCode] nvarchar(max)  NOT NULL,
-    [CompanyId] nvarchar(max)  NOT NULL,
-    [Companies_CompanyId] int  NOT NULL
+    [CompanyId] int  NOT NULL
 );
 GO
 
@@ -58,7 +71,7 @@ CREATE TABLE [dbo].[Telephones] (
     [CountryCode] nvarchar(max)  NOT NULL,
     [PhoneNumber] nvarchar(max)  NOT NULL,
     [Type] nvarchar(max)  NOT NULL,
-    [CompanyId] nvarchar(max)  NOT NULL
+    [CompanyId] int  NOT NULL
 );
 GO
 
@@ -88,34 +101,22 @@ GO
 -- Creating all FOREIGN KEY constraints
 -- --------------------------------------------------
 
--- Creating foreign key on [Companies_CompanyId] in table 'Addresses'
-ALTER TABLE [dbo].[Addresses]
-ADD CONSTRAINT [FK_AddressCompany]
-    FOREIGN KEY ([Companies_CompanyId])
-    REFERENCES [dbo].[Companies]
-        ([CompanyId])
+-- Creating foreign key on [CompanyId] in table 'Companies'
+ALTER TABLE [dbo].[Companies]
+ADD CONSTRAINT [FK_CompanyAddress]
+    FOREIGN KEY ([CompanyId])
+    REFERENCES [dbo].[Addresses]
+        ([AddressId])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
--- Creating non-clustered index for FOREIGN KEY 'FK_AddressCompany'
-CREATE INDEX [IX_FK_AddressCompany]
-ON [dbo].[Addresses]
-    ([Companies_CompanyId]);
-GO
-
--- Creating foreign key on [Telephones_TelephoneId] in table 'Companies'
+-- Creating foreign key on [CompanyId] in table 'Companies'
 ALTER TABLE [dbo].[Companies]
 ADD CONSTRAINT [FK_CompanyTelephone]
-    FOREIGN KEY ([Telephones_TelephoneId])
+    FOREIGN KEY ([CompanyId])
     REFERENCES [dbo].[Telephones]
         ([TelephoneId])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_CompanyTelephone'
-CREATE INDEX [IX_FK_CompanyTelephone]
-ON [dbo].[Companies]
-    ([Telephones_TelephoneId]);
 GO
 
 -- --------------------------------------------------

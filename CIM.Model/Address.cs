@@ -20,8 +20,8 @@ namespace CIM.Model
         public string Country { get; set; }
         public string Town { get; set; }
         public string PostCode { get; set; }
-        public string CompanyId { get; set; }
+        public int CompanyId { get; set; }
     
-        public virtual Company Companies { get; set; }
+        public virtual Company Company { get; set; }
     }
 }

@@ -12,6 +12,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
+using Microsoft.Owin.BuilderProperties;
+using Address = CIM.Model.Address;
 
 namespace CIM.Controllers
 {
@@ -73,22 +75,34 @@ namespace CIM.Controllers
             return View();
         }
 
-        [HttpPost]
+        //[HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public ActionResult EditCompanyDetails(string returnUrl, EditCompanyDetailsModel model)
         {
             if (ModelState.IsValid)
             {
                 try {
+
                     ViewBag.ReturnUrl = returnUrl;
-                    Company companyModel = new Company()
-                    {
+                     Company companyModel = new Company()
+                    {                       
                         CompanyName = model.CompanyName,
                         CompanyRegistrationNumber = model.CompanyRegistrationNumber,
-                        Telephone = model.CompanyTelephone,
-                        Address = model.CompanyAddress,
-                        AreasOfOperation = model.AreasOfOperation
+                        AreasOfOperation = model.AreasOfOperation,
+                        Telephone = new Telephone()
+                        {
+                            CountryCode = model.CountryCode,
+                            PhoneNumber = model.PhoneNumber,
+                            Type = model.Type,
+                        },
+                        Address = new Address()
+                        {
+                            AddressLine1 = model.AddressLine1,
+                            AddressLine2 = model.AddressLine2,
+                            Country = model.Country,
+                            Town = model.Town,
+                            PostCode = model.PostCode
+                        }                     
                     };
                     var dbContext = new CimDataModelContainer();
                     dbContext.Companies.Add(companyModel);
