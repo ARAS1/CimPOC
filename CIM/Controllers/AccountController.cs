@@ -93,7 +93,7 @@ namespace CIM.Controllers
                         {
                             CountryCode = model.CountryCode,
                             PhoneNumber = model.PhoneNumber,
-                            Type = model.Type,
+                            Type = model.Type
                         },
                         Address = new Address()
                         {
@@ -107,6 +107,7 @@ namespace CIM.Controllers
                     var dbContext = new CimDataModelContainer();
                     dbContext.Companies.Add(companyModel);
                     dbContext.SaveChanges();
+                    return RedirectToAction("Index", "Home");
                 }
                 catch (DbEntityValidationException dbEx)
                 {

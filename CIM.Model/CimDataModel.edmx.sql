@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 02/25/2016 16:45:41
+-- Date Created: 02/26/2016 09:55:53
 -- Generated from EDMX file: D:\WIP\CustomerIdentityManagementPOC\CIM\CIM\CIM.Model\CimDataModel.edmx
 -- --------------------------------------------------
 
