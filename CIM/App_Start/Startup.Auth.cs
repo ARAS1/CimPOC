@@ -112,7 +112,7 @@ namespace CIM
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            app.UseFacebookAuthentication(appId: "cimpocID", appSecret: "cimpocSecret");
+            app.UseFacebookAuthentication(appId: "e43f3891-238e-4d2b-924e-7710b4b283d6", appSecret: ")7Xy~3sM4dEH-?d3");
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{
@@ -127,12 +127,13 @@ namespace CIM
             PolicyConfigurationManager mgr = notification.Options.ConfigurationManager as PolicyConfigurationManager;
             if (notification.ProtocolMessage.RequestType == OpenIdConnectRequestType.LogoutRequest)
             {
-                OpenIdConnectConfiguration config = await mgr.GetConfigurationByPolicyAsync(CancellationToken.None, notification.OwinContext.Authentication.AuthenticationResponseRevoke.Properties.Dictionary[SignUpPolicyId]);
+                OpenIdConnectConfiguration config = await mgr.GetConfigurationByPolicyAsync(CancellationToken.None, SignUpPolicyId);//notification.OwinContext.Authentication.AuthenticationResponseRevoke.Properties.Dictionary["B2C_1_TestPolicy"]);
                 notification.ProtocolMessage.IssuerAddress = config.EndSessionEndpoint;
             }
             else
             {
-                OpenIdConnectConfiguration config = await mgr.GetConfigurationByPolicyAsync(CancellationToken.None, notification.OwinContext.Authentication.AuthenticationResponseChallenge.Properties.Dictionary[SignUpPolicyId]);
+
+                OpenIdConnectConfiguration config = await mgr.GetConfigurationByPolicyAsync(CancellationToken.None, SignUpPolicyId);//notification.OwinContext.Authentication.AuthenticationResponseChallenge.Properties.Dictionary["B2C_1_TestPolicy"]);
                 notification.ProtocolMessage.IssuerAddress = config.AuthorizationEndpoint;
             }
         }
