@@ -13,6 +13,7 @@ using Microsoft.Owin.Security;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
 using Microsoft.Owin.BuilderProperties;
+using Microsoft.Owin.Security.OpenIdConnect;
 using Address = CIM.Model.Address;
 
 namespace CIM.Controllers
@@ -73,6 +74,59 @@ namespace CIM.Controllers
         {
             ViewBag.ReturnUrl = returnUrl;
             return View();
+        }
+
+        //B2C
+        public void SignIn()
+        {
+            if (!Request.IsAuthenticated)
+            {
+                // To execute a policy, you simply need to trigger an OWIN challenge.
+                // You can indicate which policy to use by adding it to the AuthenticationProperties by using the PolicyKey provided.
+
+                HttpContext.GetOwinContext().Authentication.Challenge(
+                    new AuthenticationProperties(
+                        new Dictionary<string, string>
+                        {
+                    {Startup.PolicyKey, Startup.SignInPolicyId}
+                        })
+                    {
+                        RedirectUri = "/",
+                    }, OpenIdConnectAuthenticationDefaults.AuthenticationType);
+            }
+        }
+
+        public void SignUp()
+        {
+            if (!Request.IsAuthenticated)
+            {
+                HttpContext.GetOwinContext().Authentication.Challenge(
+                    new AuthenticationProperties(
+                        new Dictionary<string, string>
+                        {
+                    {Startup.PolicyKey, Startup.SignUpPolicyId}
+                        })
+                    {
+                        RedirectUri = "/",
+                    }, OpenIdConnectAuthenticationDefaults.AuthenticationType);
+            }
+        }
+
+
+        public void Profile()
+        {
+            if (Request.IsAuthenticated)
+            {
+                HttpContext.GetOwinContext().Authentication.Challenge(
+                    new AuthenticationProperties(
+                        new Dictionary<string, string>
+                        {
+                    {Startup.PolicyKey, Startup.ProfilePolicyId}
+                        })
+                    {
+                        RedirectUri = "/",
+                    }, OpenIdConnectAuthenticationDefaults.AuthenticationType);
+            }
         }
 
         //[HttpPost]

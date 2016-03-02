@@ -2,13 +2,17 @@
 using System.Configuration;
 using System.Globalization;
 using System.IdentityModel.Tokens;
+using System.Threading;
+using System.Threading.Tasks;
 using CIM.Model.Models.DataContexts;
 using CIM.Model.Models.Login;
+using CIM.PolicyAuthHelpers;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.Notifications;
 using Microsoft.Owin.Security.OpenIdConnect;
 using Owin;
 
@@ -59,7 +63,7 @@ namespace CIM
             });
 
 
-         /*   OpenIdConnectAuthenticationOptions options = new OpenIdConnectAuthenticationOptions
+          OpenIdConnectAuthenticationOptions options = new OpenIdConnectAuthenticationOptions
             {
                 // These are standard OpenID Connect parameters, with values pulled from web.config
                 ClientId = clientId,
@@ -88,7 +92,7 @@ namespace CIM
                 },
             };
 
-            app.UseOpenIdConnectAuthentication(options);*/
+            app.UseOpenIdConnectAuthentication(options);
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
             // Enables the application to temporarily store user information when they are verifying the second factor in the two-factor authentication process.
@@ -115,6 +119,30 @@ namespace CIM
             //    ClientId = "",
             //    ClientSecret = ""
             //});
+        }
+
+        // This notification can be used to manipulate the OIDC request before it is sent.  Here we use it to send the correct policy.
+        private async Task OnRedirectToIdentityProvider(RedirectToIdentityProviderNotification<OpenIdConnectMessage, OpenIdConnectAuthenticationOptions> notification)
+        {
+            PolicyConfigurationManager mgr = notification.Options.ConfigurationManager as PolicyConfigurationManager;
+            if (notification.ProtocolMessage.RequestType == OpenIdConnectRequestType.LogoutRequest)
+            {
+                OpenIdConnectConfiguration config = await mgr.GetConfigurationByPolicyAsync(CancellationToken.None, notification.OwinContext.Authentication.AuthenticationResponseRevoke.Properties.Dictionary[SignUpPolicyId]);
+                notification.ProtocolMessage.IssuerAddress = config.EndSessionEndpoint;
+            }
+            else
+            {
+                OpenIdConnectConfiguration config = await mgr.GetConfigurationByPolicyAsync(CancellationToken.None, notification.OwinContext.Authentication.AuthenticationResponseChallenge.Properties.Dictionary[SignUpPolicyId]);
+                notification.ProtocolMessage.IssuerAddress = config.AuthorizationEndpoint;
+            }
+        }
+
+        // Used for avoiding yellow-screen-of-death
+        private Task AuthenticationFailed(AuthenticationFailedNotification<OpenIdConnectMessage, OpenIdConnectAuthenticationOptions> notification)
+        {
+            notification.HandleResponse();
+            notification.Response.Redirect("/Home/Error?message=" + notification.Exception.Message);
+            return Task.FromResult(0);
         }
     }
 }
