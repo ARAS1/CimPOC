@@ -1028,7 +1028,7 @@
         </member>
         <member name="M:System.IdentityModel.Tokens.JwtSecurityToken.ToString">
             <summary>
-            Decodes the <see cref="T:System.IdentityModel.Tokens.JwtHeader"/> and <see cref="T:System.IdentityModel.Tokens.JwtPayload"/>
+            Serializes the <see cref="T:System.IdentityModel.Tokens.JwtHeader"/> and <see cref="T:System.IdentityModel.Tokens.JwtPayload"/>
             </summary>
             <returns>A string containing the header and payload in JSON format</returns>
         </member>
@@ -1381,7 +1381,7 @@
         </member>
         <member name="M:System.IdentityModel.Tokens.JwtSecurityTokenHandler.CreateActorValue(System.Security.Claims.ClaimsIdentity)">
             <summary>
-            Creates the 'value' for the actor claim: { actort, 'value' }
+            Creates the 'value' for the actor claim: { actor, 'value' }
             </summary>
             <param name="actor"><see cref="T:System.Security.Claims.ClaimsIdentity"/> as actor.</param>
             <returns><see cref="T:System.String"/> representing the actor.</returns>

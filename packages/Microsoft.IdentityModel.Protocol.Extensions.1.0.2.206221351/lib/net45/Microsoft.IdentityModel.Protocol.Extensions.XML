@@ -119,7 +119,7 @@
         </member>
         <member name="M:Microsoft.IdentityModel.Protocols.StaticConfigurationManager`1.#ctor(`0)">
             <summary>
-            Initializes an new instance of <see cref="!:StaticConfigurationManager"/> with a Configuration instance.
+            Initializes an new instance of <see cref="T:Microsoft.IdentityModel.Protocols.StaticConfigurationManager`1"/> with a Configuration instance.
             </summary>
             <param name="configuration">Configuration of type <see cref="T:Microsoft.IdentityModel.Protocols.OpenIdConnectConfiguration"/> or <see cref="T:Microsoft.IdentityModel.Protocols.WsFederationConfiguration"/>.</param>
         </member>
