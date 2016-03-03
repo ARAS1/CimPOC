@@ -252,7 +252,6 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Home\RandomView.cshtml" />
     <Content Include="Views\Account\RegisterCompanyUser.cshtml" />
     <Content Include="Views\Account\RegisterStaffUser.cshtml" />
     <Content Include="Views\Account\RegisterCustomerUser.cshtml" />
