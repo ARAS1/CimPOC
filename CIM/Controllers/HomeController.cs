@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Security.Claims;
+using System.Web.Mvc;
 
 namespace CIM.Controllers
 {
@@ -23,17 +25,17 @@ namespace CIM.Controllers
             return View();
         }
 
-        public ActionResult RandomView()
-        {
-            ViewBag.Message = "Random View Page 123456";
-
-            return View();
-        }
-
         public ActionResult PrivacyPolicy()
         {
             ViewBag.Message = "Privacy Policy";
 
+            return View();
+        }
+
+        public ActionResult Claims()
+        {
+            Claim displayName = ClaimsPrincipal.Current.FindFirst(ClaimsPrincipal.Current.Identities.First().NameClaimType);
+            ViewBag.DisplayName = displayName != null ? displayName.Value : string.Empty;
             return View();
         }
     }
