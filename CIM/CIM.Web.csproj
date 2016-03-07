@@ -259,6 +259,7 @@
     <Content Include="Views\Account\ListUsers.cshtml" />
     <Content Include="Views\Account\EditCompanyDetails.cshtml" />
     <Content Include="Views\Home\privacypolicy.cshtml" />
+    <None Include="Views\Home\Claims.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
