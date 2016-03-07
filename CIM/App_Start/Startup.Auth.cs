@@ -132,7 +132,7 @@ namespace CIM
             }
             else
             {
-                OpenIdConnectConfiguration config = await mgr.GetConfigurationByPolicyAsync(CancellationToken.None, notification.OwinContext.Authentication.AuthenticationResponseChallenge.Properties.Dictionary[Startup.PolicyKey]);
+                OpenIdConnectConfiguration config = await mgr.GetConfigurationByPolicyAsync(CancellationToken.None, SignInPolicyId);//notification.OwinContext.Authentication.AuthenticationResponseChallenge.Properties.Dictionary[SignInPolicyId]);
                 notification.ProtocolMessage.IssuerAddress = config.AuthorizationEndpoint;
             }
         }
