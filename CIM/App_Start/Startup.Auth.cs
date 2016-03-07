@@ -112,7 +112,7 @@ namespace CIM
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(appId: "e43f3891-238e-4d2b-924e-7710b4b283d6", appSecret: ")7Xy~3sM4dEH-?d3");
+            app.UseFacebookAuthentication(appId: "1699357277020737", appSecret: "1bbadcda7163c964053994ee75d725ee");
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{
@@ -130,10 +130,14 @@ namespace CIM
                 OpenIdConnectConfiguration config = await mgr.GetConfigurationByPolicyAsync(CancellationToken.None, SignInPolicyId);//notification.OwinContext.Authentication.AuthenticationResponseRevoke.Properties.Dictionary["B2C_1_TestPolicy"]);
                 notification.ProtocolMessage.IssuerAddress = config.EndSessionEndpoint;
             }
+            else if (notification.ProtocolMessage.RequestType == OpenIdConnectRequestType.AuthenticationRequest)
+            {
+                OpenIdConnectConfiguration config =await mgr.GetConfigurationByPolicyAsync(CancellationToken.None, SignInPolicyId);//notification.OwinContext.Authentication.AuthenticationResponseChallenge.Properties.Dictionary["B2C_1_TestPolicy"]);
+                notification.ProtocolMessage.IssuerAddress = config.AuthorizationEndpoint;
+            }
             else
             {
-
-                OpenIdConnectConfiguration config = await mgr.GetConfigurationByPolicyAsync(CancellationToken.None, SignInPolicyId);//notification.OwinContext.Authentication.AuthenticationResponseChallenge.Properties.Dictionary["B2C_1_TestPolicy"]);
+                OpenIdConnectConfiguration config = await mgr.GetConfigurationByPolicyAsync(CancellationToken.None, SignUpPolicyId);//notification.OwinContext.Authentication.AuthenticationResponseChallenge.Properties.Dictionary["B2C_1_TestPolicy"]);
                 notification.ProtocolMessage.IssuerAddress = config.AuthorizationEndpoint;
             }
         }
