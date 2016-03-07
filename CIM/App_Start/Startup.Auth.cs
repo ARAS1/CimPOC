@@ -127,17 +127,12 @@ namespace CIM
             PolicyConfigurationManager mgr = notification.Options.ConfigurationManager as PolicyConfigurationManager;
             if (notification.ProtocolMessage.RequestType == OpenIdConnectRequestType.LogoutRequest)
             {
-                OpenIdConnectConfiguration config = await mgr.GetConfigurationByPolicyAsync(CancellationToken.None, SignInPolicyId);//notification.OwinContext.Authentication.AuthenticationResponseRevoke.Properties.Dictionary["B2C_1_TestPolicy"]);
+                OpenIdConnectConfiguration config = await mgr.GetConfigurationByPolicyAsync(CancellationToken.None, notification.OwinContext.Authentication.AuthenticationResponseRevoke.Properties.Dictionary[Startup.PolicyKey]);
                 notification.ProtocolMessage.IssuerAddress = config.EndSessionEndpoint;
-            }
-            else if (notification.ProtocolMessage.RequestType == OpenIdConnectRequestType.AuthenticationRequest)
-            {
-                OpenIdConnectConfiguration config =await mgr.GetConfigurationByPolicyAsync(CancellationToken.None, SignInPolicyId);//notification.OwinContext.Authentication.AuthenticationResponseChallenge.Properties.Dictionary["B2C_1_TestPolicy"]);
-                notification.ProtocolMessage.IssuerAddress = config.AuthorizationEndpoint;
             }
             else
             {
-                OpenIdConnectConfiguration config = await mgr.GetConfigurationByPolicyAsync(CancellationToken.None, SignUpPolicyId);//notification.OwinContext.Authentication.AuthenticationResponseChallenge.Properties.Dictionary["B2C_1_TestPolicy"]);
+                OpenIdConnectConfiguration config = await mgr.GetConfigurationByPolicyAsync(CancellationToken.None, notification.OwinContext.Authentication.AuthenticationResponseChallenge.Properties.Dictionary[Startup.PolicyKey]);
                 notification.ProtocolMessage.IssuerAddress = config.AuthorizationEndpoint;
             }
         }
