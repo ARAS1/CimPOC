@@ -91,7 +91,7 @@ namespace CIM.Controllers
                     {Startup.PolicyKey, Startup.SignInPolicyId}
                         })
                     {
-                        RedirectUri = "/",
+                        RedirectUri = "consumeridentitymanagement.azurewebsites.net",
                     }, OpenIdConnectAuthenticationDefaults.AuthenticationType);
             }
         }
