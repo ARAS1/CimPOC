@@ -11,7 +11,7 @@ namespace TripGallery.MVCClient.Helpers
     // code adjusted from Thinktecture's client model (thinktecture.github.com)
     public static class TokenHelper
     {
-        public static void DecodeAndWrite(string token)
+        public static JObject DecodeAndWrite(string token)
         {
             try
             { 
@@ -38,15 +38,14 @@ namespace TripGallery.MVCClient.Helpers
                 var partAsUTF8String = Encoding.UTF8.GetString(partAsBytes, 0, partAsBytes.Count());
 
                 // Json .NET
-                var jwt = JObject.Parse(partAsUTF8String);
+                JObject jwt = JObject.Parse(partAsUTF8String);
 
-                // Write to output
-                Debug.Write(jwt.ToString());
+                return jwt;
             }
             catch (Exception ex)
             {
                 // something went wrong
-                Debug.Write(ex.Message);
+                return null;
             }
         }
     }

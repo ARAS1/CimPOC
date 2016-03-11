@@ -34,6 +34,7 @@ namespace CIM.Controllers
 
         public ActionResult Claims()
         {
+            
             Claim displayName = ClaimsPrincipal.Current.FindFirst(ClaimsPrincipal.Current.Identities.First().NameClaimType);
             ViewBag.Issuer = displayName.Issuer;
             ViewBag.Keys = displayName.Properties.Keys;

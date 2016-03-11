@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IdentityModel.Tokens;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using CIM.Model.Models.DataContexts;
 using CIM.Model.Models.Login;
 using CIM.PolicyAuthHelpers;
@@ -15,6 +16,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Notifications;
 using Microsoft.Owin.Security.OpenIdConnect;
 using Owin;
+using TripGallery.MVCClient.Helpers;
 
 namespace CIM
 {
@@ -73,6 +75,8 @@ namespace CIM
                 {
                     AuthenticationFailed = AuthenticationFailed,
                     RedirectToIdentityProvider = OnRedirectToIdentityProvider,
+                    SecurityTokenValidated = SecurityTokenValidated,
+                    SecurityTokenReceived = SecurityTokenReceived
                 },
                 Scope = "openid",
                 ResponseType = "id_token",
@@ -94,31 +98,20 @@ namespace CIM
 
             app.UseOpenIdConnectAuthentication(options);
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
-
-            // Enables the application to temporarily store user information when they are verifying the second factor in the two-factor authentication process.
             app.UseTwoFactorSignInCookie(DefaultAuthenticationTypes.TwoFactorCookie, TimeSpan.FromMinutes(5));
-
-            // Enables the application to remember the second login verification factor such as phone or email.
-            // Once you check this option, your second step of verification during the login process will be remembered on the device where you logged in from.
-            // This is similar to the RememberMe option when you log in.
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
+        }
 
-            // Uncomment the following lines to enable logging in with third party login providers
-            //app.UseMicrosoftAccountAuthentication(
-            //    clientId: "",
-            //    clientSecret: "");
+        private Task SecurityTokenReceived(SecurityTokenReceivedNotification<OpenIdConnectMessage, OpenIdConnectAuthenticationOptions> securityTokenReceivedNotification)
+        {
+            throw new NotImplementedException();
+        }
 
-            //app.UseTwitterAuthentication(
-            //   consumerKey: "",
-            //   consumerSecret: "");
-
-            app.UseFacebookAuthentication(appId: "1699357277020737", appSecret: "1bbadcda7163c964053994ee75d725ee");
-
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+        private Task SecurityTokenValidated(SecurityTokenValidatedNotification<OpenIdConnectMessage, OpenIdConnectAuthenticationOptions> securityTokenValidatedNotification)
+        {
+            var token = TokenHelper.DecodeAndWrite(securityTokenValidatedNotification.ProtocolMessage.IdToken);
+            
+            return Task.CompletedTask;
         }
 
         // This notification can be used to manipulate the OIDC request before it is sent.  Here we use it to send the correct policy.
@@ -144,5 +137,6 @@ namespace CIM
             notification.Response.Redirect("/Home/Error?message=" + notification.Exception.Message);
             return Task.FromResult(0);
         }
+
     }
 }
