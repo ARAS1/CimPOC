@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Owin;
+using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Notifications;
 using Microsoft.Owin.Security.OpenIdConnect;
@@ -43,29 +44,30 @@ namespace CIM
         public void ConfigureAuth(IAppBuilder app)
         {
             // Configure the db context, user manager and signin manager to use a single instance per request
-            app.CreatePerOwinContext(ApplicationDbContext.Create);
-            app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
-            app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
+                
+                 app.CreatePerOwinContext(ApplicationDbContext.Create);
+                 app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
+                 app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
 
-            // Enable the application to use a cookie to store information for the signed in user
-            // and to use a cookie to temporarily store information about a user logging in with a third party login provider
-            // Configure the sign in cookie
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-                LoginPath = new PathString("/Account/Login"),
-                Provider = new CookieAuthenticationProvider
-                {
-                    // Enables the application to validate the security stamp when the user logs in.
-                    // This is a security feature which is used when you change a password or add an external login to your account.  
-                    OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, CustomerUser>(
-                        validateInterval: TimeSpan.FromMinutes(30),
-                        regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
-                }
-            });
+                 // Enable the application to use a cookie to store information for the signed in user
+                 // and to use a cookie to temporarily store information about a user logging in with a third party login provider
+                 // Configure the sign in cookie
+                 app.UseCookieAuthentication(new CookieAuthenticationOptions
+                 {
+                     AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
+                     LoginPath = new PathString("/Account/Login"),
+                     Provider = new CookieAuthenticationProvider
+                     {
+                         // Enables the application to validate the security stamp when the user logs in.
+                         // This is a security feature which is used when you change a password or add an external login to your account.  
+                         OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, CustomerUser>(
+                             validateInterval: TimeSpan.FromMinutes(30),
+                             regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
+                     }
+                 });
 
-
-          OpenIdConnectAuthenticationOptions options = new OpenIdConnectAuthenticationOptions
+         
+            OpenIdConnectAuthenticationOptions options = new OpenIdConnectAuthenticationOptions
             {
                 // These are standard OpenID Connect parameters, with values pulled from web.config
                 ClientId = clientId,
@@ -75,8 +77,10 @@ namespace CIM
                 {
                     AuthenticationFailed = AuthenticationFailed,
                     RedirectToIdentityProvider = OnRedirectToIdentityProvider,
+                    MessageReceived = MessageReceived,
                     SecurityTokenValidated = SecurityTokenValidated,
-                    SecurityTokenReceived = SecurityTokenReceived
+                    SecurityTokenReceived = SecurityTokenReceived,
+                    AuthorizationCodeReceived = AuthorizationCodeReceived
                 },
                 Scope = "openid",
                 ResponseType = "id_token",
@@ -97,9 +101,23 @@ namespace CIM
             };
 
             app.UseOpenIdConnectAuthentication(options);
+            app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
+            app.UseCookieAuthentication(new CookieAuthenticationOptions());
+            
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
             app.UseTwoFactorSignInCookie(DefaultAuthenticationTypes.TwoFactorCookie, TimeSpan.FromMinutes(5));
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
+            
+        }
+
+        private Task AuthorizationCodeReceived(AuthorizationCodeReceivedNotification authorizationCodeReceivedNotification) 
+        {
+            throw new NotImplementedException();
+        }
+
+        private Task MessageReceived(MessageReceivedNotification<OpenIdConnectMessage, OpenIdConnectAuthenticationOptions> messageReceivedNotification)
+        {
+            throw new NotImplementedException();
         }
 
         private Task SecurityTokenReceived(SecurityTokenReceivedNotification<OpenIdConnectMessage, OpenIdConnectAuthenticationOptions> securityTokenReceivedNotification)
