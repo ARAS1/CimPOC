@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.Globalization;
 using System.IdentityModel.Tokens;
 using System.Threading;
@@ -16,6 +17,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Notifications;
 using Microsoft.Owin.Security.OpenIdConnect;
+using Newtonsoft.Json.Linq;
 using Owin;
 using TripGallery.MVCClient.Helpers;
 
@@ -39,7 +41,9 @@ namespace CIM
         public static string SignUpPolicyId = ConfigurationManager.AppSettings["ida:SignUpPolicyId"];
         public static string SignInPolicyId = ConfigurationManager.AppSettings["ida:SignInPolicyId"];
         public static string ProfilePolicyId = ConfigurationManager.AppSettings["ida:UserProfilePolicyId"];
+
         public string IdToken;
+        public OwinContext Context;
         // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
@@ -79,13 +83,14 @@ namespace CIM
                     RedirectToIdentityProvider = OnRedirectToIdentityProvider,
                     MessageReceived = message =>
                     {
+                        Context = (OwinContext) message.OwinContext;
                         IdToken = message.ProtocolMessage.IdToken;
-                        
-                        return Task.FromResult(IdToken);
+                        message.Response.Redirect("/Home/About");
+                        return Task.FromResult(0);
                     },
-              //      SecurityTokenValidated = SecurityTokenValidated,
-              //      SecurityTokenReceived = SecurityTokenReceived,
-              //      AuthorizationCodeReceived = AuthorizationCodeReceived
+                    SecurityTokenValidated = SecurityTokenValidated,
+                    SecurityTokenReceived = SecurityTokenReceived,
+                    AuthorizationCodeReceived = AuthorizationCodeReceived
                 },
                 Scope = "openid",
                 ResponseType = "id_token",
