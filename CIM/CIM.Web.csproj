@@ -196,7 +196,6 @@
     <Compile Include="PolicyAuthHelpers\HttpDocumentRetriever.cs" />
     <Compile Include="PolicyAuthHelpers\PolicyAuthorize.cs" />
     <Compile Include="PolicyAuthHelpers\PolicyConfigurationManager.cs" />
-    <Compile Include="PolicyAuthHelpers\TokenHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

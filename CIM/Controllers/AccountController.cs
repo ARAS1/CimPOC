@@ -12,13 +12,13 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
+using System.Security.Claims;
 using Microsoft.Owin.BuilderProperties;
 using Microsoft.Owin.Security.OpenIdConnect;
 using Address = CIM.Model.Address;
 
 namespace CIM.Controllers
 {
-    [Authorize]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
@@ -79,7 +79,7 @@ namespace CIM.Controllers
         //B2C
         public void SignIn()
         {
-            if (!Request.IsAuthenticated)
+            if (HttpContext.User == null || !HttpContext.User.Identity.IsAuthenticated)
             {
                 // To execute a policy, you simply need to trigger an OWIN challenge.
                 // You can indicate which policy to use by adding it to the AuthenticationProperties by using the PolicyKey provided.
@@ -91,14 +91,19 @@ namespace CIM.Controllers
                     {Startup.PolicyKey, Startup.SignInPolicyId}
                         })
                     {
-                        RedirectUri = "consumeridentitymanagement.azurewebsites.net",
+                        RedirectUri = "/Home/Index",
                     }, OpenIdConnectAuthenticationDefaults.AuthenticationType);
+                HttpContext.GetOwinContext().Authentication.SignIn(new ClaimsIdentity()
+                {
+                    Claims = { }
+                
+                });
             }
         }
 
         public void SignUp()
         {
-            if (!Request.IsAuthenticated)
+            if (HttpContext.User == null || !HttpContext.User.Identity.IsAuthenticated)
             {
                 HttpContext.GetOwinContext().Authentication.Challenge(
                     new AuthenticationProperties(
@@ -107,7 +112,7 @@ namespace CIM.Controllers
                     {Startup.PolicyKey, Startup.SignUpPolicyId}
                         })
                     {
-                        RedirectUri = "/",
+                        RedirectUri = "/Home/Claims",
                     }, OpenIdConnectAuthenticationDefaults.AuthenticationType);
             }
         }
@@ -115,7 +120,7 @@ namespace CIM.Controllers
 
         public void Profile()
         {
-            if (Request.IsAuthenticated)
+            if (HttpContext.User == null || !HttpContext.User.Identity.IsAuthenticated)
             {
                 HttpContext.GetOwinContext().Authentication.Challenge(
                     new AuthenticationProperties(
@@ -124,7 +129,7 @@ namespace CIM.Controllers
                     {Startup.PolicyKey, Startup.ProfilePolicyId}
                         })
                     {
-                        RedirectUri = "/",
+                        RedirectUri = "/Home/Claims",
                     }, OpenIdConnectAuthenticationDefaults.AuthenticationType);
             }
         }

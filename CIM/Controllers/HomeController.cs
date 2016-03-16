@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
+using System.Web;
 using System.Web.Mvc;
+using CIM.PolicyAuthHelpers;
 
 namespace CIM.Controllers
 {
@@ -11,6 +14,7 @@ namespace CIM.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -32,10 +36,11 @@ namespace CIM.Controllers
             return View();
         }
 
+        [PolicyAuthorize (Policy = "B2C_1_signInTestPolicy")]
         public ActionResult Claims()
-        {
-            
+        {           
             Claim displayName = ClaimsPrincipal.Current.FindFirst(ClaimsPrincipal.Current.Identities.First().NameClaimType);
+            var claims = HttpContext.GetOwinContext().Authentication.User.Claims;
             ViewBag.Issuer = displayName.Issuer;
             ViewBag.Keys = displayName.Properties.Keys;
             ViewBag.Values = displayName.Properties.Values;
