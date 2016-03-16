@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.IdentityModel.Tokens;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Mvc;
 using CIM.PolicyAuthHelpers;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -41,6 +43,7 @@ namespace CIM
 
         public string IdToken;
         public OwinContext Context = new OwinContext();
+        HttpContext HttpContext = HttpContext.Current;
         // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
@@ -58,13 +61,14 @@ namespace CIM
                     RedirectToIdentityProvider = OnRedirectToIdentityProvider,
                     SecurityTokenValidated = message =>
                       {
-
                           IdToken = message.ProtocolMessage.IdToken;
                           var newJwt = new JwtSecurityTokenHandler().ReadToken(IdToken) as JwtSecurityToken;
-                          ClaimsIdentity claimsIdentity = new ClaimsIdentity();            
+                          ClaimsIdentity claimsIdentity = new ClaimsIdentity();                          
                           claimsIdentity.AddClaims(newJwt.Claims);
-                          Context.Authentication.SignIn(claimsIdentity);
-                          return Task.FromResult(0);
+                          message.OwinContext.Response.Context.Authentication.AuthenticationResponseGrant = new AuthenticationResponseGrant(claimsIdentity, new AuthenticationProperties());
+                          message.OwinContext.Response.Context.Authentication.User = new ClaimsPrincipal(claimsIdentity);
+                     //     message.AuthenticationTicket = new AuthenticationTicket(claimsIdentity, new AuthenticationProperties() {RedirectUri = "/Home/Claims/"});
+                          return Task.FromResult(newJwt);
                       }
                 },
                 Scope = "openid profile address",

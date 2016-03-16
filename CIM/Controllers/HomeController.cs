@@ -29,6 +29,7 @@ namespace CIM.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult PrivacyPolicy()
         {
             ViewBag.Message = "Privacy Policy";
@@ -36,11 +37,14 @@ namespace CIM.Controllers
             return View();
         }
 
-        [PolicyAuthorize (Policy = "B2C_1_signInTestPolicy")]
+        //[PolicyAuthorize(Policy = "B2C_1_profileEditingTestPolicy")]
         public ActionResult Claims()
         {           
             Claim displayName = ClaimsPrincipal.Current.FindFirst(ClaimsPrincipal.Current.Identities.First().NameClaimType);
             var claims = HttpContext.GetOwinContext().Authentication.User.Claims;
+            bool isAuthenticated = HttpContext.GetOwinContext().Authentication.User.Identity.IsAuthenticated;
+            var authType = HttpContext.GetOwinContext().Authentication.User.Identity.AuthenticationType;
+            var authName = HttpContext.GetOwinContext().Authentication.User.Identity.Name;
             ViewBag.Issuer = displayName.Issuer;
             ViewBag.Keys = displayName.Properties.Keys;
             ViewBag.Values = displayName.Properties.Values;

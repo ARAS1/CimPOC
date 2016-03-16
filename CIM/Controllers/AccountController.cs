@@ -93,11 +93,7 @@ namespace CIM.Controllers
                     {
                         RedirectUri = "/Home/Index",
                     }, OpenIdConnectAuthenticationDefaults.AuthenticationType);
-                HttpContext.GetOwinContext().Authentication.SignIn(new ClaimsIdentity()
-                {
-                    Claims = { }
                 
-                });
             }
         }
 
